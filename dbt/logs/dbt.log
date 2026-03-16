@@ -1,0 +1,88 @@
+[0m21:11:44.806708 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x11e3d6b10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x11e372790>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x11e3e0d10>]}
+
+
+============================== 21:11:44.819314 | d59663ae-6d20-4e17-9ff0-a2e271230630 ==============================
+[0m21:11:44.819314 [info ] [MainThread]: Running with dbt=1.11.7
+[0m21:11:44.819815 [debug] [MainThread]: running dbt with arguments {'warn_error': 'None', 'introspect': 'True', 'partial_parse': 'True', 'target_path': 'None', 'version_check': 'True', 'fail_fast': 'False', 'send_anonymous_usage_stats': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'no_print': 'None', 'write_json': 'True', 'empty': 'None', 'log_format': 'default', 'debug': 'False', 'quiet': 'False', 'cache_selected_only': 'False', 'invocation_command': 'dbt init heymax', 'printer_width': '80', 'indirect_selection': 'eager', 'log_path': 'logs', 'log_cache_events': 'False', 'use_experimental_parser': 'False', 'use_colors': 'True', 'static_parser': 'True', 'profiles_dir': '/Users/faheemrajwadkar/.dbt'}
+[0m21:11:44.944051 [info ] [MainThread]: Creating dbt configuration folder at /Users/faheemrajwadkar/.dbt
+[0m21:11:44.952158 [debug] [MainThread]: Starter project path: /Users/faheemrajwadkar/code/miniconda3/envs/fr28_heymax/lib/python3.11/site-packages/dbt/include/starter_project
+[0m21:11:45.002808 [info ] [MainThread]: 
+Your new dbt project "heymax" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m21:11:45.003316 [info ] [MainThread]: Setting up your profile.
+[0m21:12:03.474211 [info ] [MainThread]: Profile heymax written to /Users/faheemrajwadkar/.dbt/profiles.yml using target's sample configuration. Once updated, you'll be able to start developing with dbt.
+[0m21:12:03.485557 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 18.78542, "process_in_blocks": "0", "process_kernel_time": 0.762152, "process_mem_max_rss": "149356544", "process_out_blocks": "0", "process_user_time": 2.267002}
+[0m21:12:03.485976 [debug] [MainThread]: Command `dbt init` succeeded at 21:12:03.485896 after 18.79 seconds
+[0m21:12:03.486323 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x104c94710>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x104c94910>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x11e373210>]}
+[0m21:12:03.486597 [debug] [MainThread]: Flushing usage events
+[0m21:12:04.813573 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m21:16:20.939385 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1165138d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x116805f10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x116806610>]}
+
+
+============================== 21:16:20.942722 | be246e3c-402f-4703-9419-1958235ec7be ==============================
+[0m21:16:20.942722 [info ] [MainThread]: Running with dbt=1.11.7
+[0m21:16:20.943033 [debug] [MainThread]: running dbt with arguments {'log_path': 'logs', 'empty': 'None', 'log_format': 'default', 'debug': 'False', 'version_check': 'True', 'printer_width': '80', 'log_cache_events': 'False', 'invocation_command': 'dbt debug', 'fail_fast': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'write_json': 'True', 'use_colors': 'True', 'warn_error': 'None', 'quiet': 'False', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'no_print': 'None', 'indirect_selection': 'eager', 'profiles_dir': '/Users/faheemrajwadkar/.dbt', 'introspect': 'True', 'use_experimental_parser': 'False', 'send_anonymous_usage_stats': 'True', 'target_path': 'None'}
+[0m21:16:20.970244 [info ] [MainThread]: dbt version: 1.11.7
+[0m21:16:20.970469 [info ] [MainThread]: python version: 3.11.15
+[0m21:16:20.970620 [info ] [MainThread]: python path: /Users/faheemrajwadkar/code/miniconda3/envs/fr28_heymax/bin/python3.11
+[0m21:16:20.970751 [info ] [MainThread]: os info: macOS-26.3.1-arm64-arm-64bit
+[0m21:16:21.124175 [info ] [MainThread]: Using profiles dir at /Users/faheemrajwadkar/.dbt
+[0m21:16:21.124444 [info ] [MainThread]: Using profiles.yml file at /Users/faheemrajwadkar/.dbt/profiles.yml
+[0m21:16:21.124595 [info ] [MainThread]: Using dbt_project.yml file at /Users/faheemrajwadkar/heymax/heymax-analytics-case-study/dbt/dbt_project.yml
+[0m21:16:21.134058 [info ] [MainThread]: adapter type: duckdb
+[0m21:16:21.134367 [info ] [MainThread]: adapter version: 1.10.1
+[0m21:16:21.134686 [info ] [MainThread]: Configuration:
+[0m21:16:21.134833 [info ] [MainThread]:   profiles.yml file [[32mOK found and valid[0m]
+[0m21:16:21.134958 [info ] [MainThread]:   dbt_project.yml file [[31mERROR not found[0m]
+[0m21:16:21.135073 [info ] [MainThread]: Required dependencies:
+[0m21:16:21.135248 [debug] [MainThread]: Executing "git --help"
+[0m21:16:21.154683 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--no-lazy-fetch]\n           [--no-optional-locks] [--no-advice] [--bare] [--git-dir=<path>]\n           [--work-tree=<path>] [--namespace=<name>] [--config-env=<name>=<envvar>]\n           <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone      Clone a repository into a new directory\n   init       Create an empty Git repository or reinitialize an existing one\n\nwork on the current change (see also: git help everyday)\n   add        Add file contents to the index\n   mv         Move or rename a file, a directory, or a symlink\n   restore    Restore working tree files\n   rm         Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect     Use binary search to find the commit that introduced a bug\n   diff       Show changes between commits, commit and working tree, etc\n   grep       Print lines matching a pattern\n   log        Show commit logs\n   show       Show various types of objects\n   status     Show the working tree status\n\ngrow, mark and tweak your common history\n   backfill   Download missing objects in a partial clone\n   branch     List, create, or delete branches\n   commit     Record changes to the repository\n   merge      Join two or more development histories together\n   rebase     Reapply commits on top of another base tip\n   reset      Reset current HEAD to the specified state\n   switch     Switch branches\n   tag        Create, list, delete or verify a tag object signed with GPG\n\ncollaborate (see also: git help workflows)\n   fetch      Download objects and refs from another repository\n   pull       Fetch from and integrate with another repository or a local branch\n   push       Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m21:16:21.155277 [debug] [MainThread]: STDERR: "b''"
+[0m21:16:21.155471 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m21:16:21.155642 [info ] [MainThread]: Connection:
+[0m21:16:21.155804 [info ] [MainThread]:   database: dev
+[0m21:16:21.155916 [info ] [MainThread]:   schema: main
+[0m21:16:21.156024 [info ] [MainThread]:   path: dev.duckdb
+[0m21:16:21.156131 [info ] [MainThread]:   config_options: None
+[0m21:16:21.156235 [info ] [MainThread]:   extensions: None
+[0m21:16:21.156340 [info ] [MainThread]:   settings: {}
+[0m21:16:21.156444 [info ] [MainThread]:   external_root: .
+[0m21:16:21.156550 [info ] [MainThread]:   use_credential_provider: None
+[0m21:16:21.156653 [info ] [MainThread]:   attach: None
+[0m21:16:21.156755 [info ] [MainThread]:   filesystems: None
+[0m21:16:21.156859 [info ] [MainThread]:   remote: None
+[0m21:16:21.156960 [info ] [MainThread]:   plugins: None
+[0m21:16:21.157061 [info ] [MainThread]:   disable_transactions: False
+[0m21:16:21.157357 [info ] [MainThread]: Registered adapter: duckdb=1.10.1
+[0m21:16:22.025602 [debug] [MainThread]: Acquiring new duckdb connection 'debug'
+[0m21:16:23.451153 [debug] [MainThread]: Using duckdb connection "debug"
+[0m21:16:23.452329 [debug] [MainThread]: On debug: select 1 as id
+[0m21:16:23.453087 [debug] [MainThread]: Opening a new connection, currently in state init
+[0m21:16:23.486265 [debug] [MainThread]: SQL status: OK in 0.033 seconds
+[0m21:16:23.487242 [debug] [MainThread]: On debug: Close
+[0m21:16:23.487763 [info ] [MainThread]:   Connection test: [[32mOK connection ok[0m]
+
+[0m21:16:23.488051 [info ] [MainThread]: [31m1 check failed:[0m
+[0m21:16:23.488249 [info ] [MainThread]: Project loading failed for the following reason:
+ project path </Users/faheemrajwadkar/heymax/heymax-analytics-case-study/dbt/dbt_project.yml> not found
+
+[0m21:16:23.492203 [debug] [MainThread]: Resource report: {"command_name": "debug", "command_success": false, "command_wall_clock_time": 2.5987577, "process_in_blocks": "0", "process_kernel_time": 0.432374, "process_mem_max_rss": "155975680", "process_out_blocks": "0", "process_user_time": 1.229088}
+[0m21:16:23.492612 [debug] [MainThread]: Command `dbt debug` failed at 21:16:23.492532 after 2.60 seconds
+[0m21:16:23.492925 [debug] [MainThread]: Connection 'debug' was properly closed.
+[0m21:16:23.493211 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x116806350>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1168c7f90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x116b83850>]}
+[0m21:16:23.493546 [debug] [MainThread]: Flushing usage events
+[0m21:16:25.144569 [debug] [MainThread]: An error was encountered while trying to flush usage events

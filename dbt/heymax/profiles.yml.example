@@ -1,0 +1,7 @@
+heymax:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: ../../data/warehouse/heymax.duckdb # provide duckdb file path here
+      threads: 4
