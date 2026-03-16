@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: stg_events_stream
+    description: "Staging model for raw user events ingested from the HeyMax event stream. This model standardizes column types and naming conventions while preserving the original event-level grain of the source table. Each row represents a single user interaction event."
+
+    columns:
+      - name: event_time
+        description: Timestamp at which the event occurred in the application.
+        tests:
+          - not_null
+
+      - name: user_id
+        description: Unique identifier for the user who triggered the event.
+        tests:
+          - not_null
+
+      - name: user_gender
+        description: Gender associated with the user profile at the time of the event.
+
+      - name: event_type
+        description: Type of event performed by the user. Examples include earning miles, redeeming miles, liking content, sharing content, or searching for rewards.
+        tests:
+          - not_null
+
+      - name: transaction_category
+        description: Category associated with the event when applicable, such as shopping, dining, ecommerce, or travel. This field is primarily populated for transactional events like miles earned or redeemed.
+        
+      - name: miles_amount
+        description: Number of loyalty miles earned or redeemed in the event. This field is populated only for events related to miles transactions.
+
+      - name: platform
+        description: Platform from which the event originated, such as iOS, Android, or web.
+        tests:
+          - not_null
+
+      - name: utm_source
+        description: Marketing acquisition source associated with the user session, such as organic, TikTok, or Facebook.
+
+      - name: country
+        description: Country code representing the geographic location of the user when the event occurred.
+
+      - name: _batched_at
+        description: Timestamp indicating when the event batch was processed by the analytics pipeline.
+        tests:
+          - not_null
+    
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - user_id
+          - event_time
