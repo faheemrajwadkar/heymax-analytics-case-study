@@ -1,0 +1,16 @@
+[0m00:31:10.586186 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107be9890>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107817dd0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107c025d0>]}
+
+
+============================== 00:31:10.599147 | d3e6da10-771a-4d84-8a6d-004672977e78 ==============================
+[0m00:31:10.599147 [info ] [MainThread]: Running with dbt=1.11.7
+[0m00:31:10.599706 [debug] [MainThread]: running dbt with arguments {'invocation_command': 'dbt compile --select stg_events_stream.sql', 'indirect_selection': 'eager', 'fail_fast': 'False', 'use_experimental_parser': 'False', 'debug': 'False', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'static_parser': 'True', 'write_json': 'True', 'profiles_dir': '/Users/faheemrajwadkar/.dbt', 'cache_selected_only': 'False', 'target_path': 'None', 'printer_width': '80', 'partial_parse': 'True', 'warn_error': 'None', 'use_colors': 'True', 'send_anonymous_usage_stats': 'True', 'no_print': 'None', 'empty': 'False', 'log_path': 'logs', 'log_format': 'default', 'log_cache_events': 'False', 'version_check': 'True', 'quiet': 'False', 'introspect': 'True'}
+[0m00:31:10.600264 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /Users/faheemrajwadkar/heymax/heymax-analytics-case-study/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m00:31:10.617146 [debug] [MainThread]: Resource report: {"command_name": "compile", "command_success": false, "command_wall_clock_time": 0.16495883, "process_in_blocks": "0", "process_kernel_time": 0.811261, "process_mem_max_rss": "136806400", "process_out_blocks": "0", "process_user_time": 2.441105}
+[0m00:31:10.617631 [debug] [MainThread]: Command `dbt compile` failed at 00:31:10.617543 after 0.17 seconds
+[0m00:31:10.617932 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1011d1c10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1011d1c50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107b79590>]}
+[0m00:31:10.618236 [debug] [MainThread]: Flushing usage events
+[0m00:31:12.029885 [debug] [MainThread]: An error was encountered while trying to flush usage events

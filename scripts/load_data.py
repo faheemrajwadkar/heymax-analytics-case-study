@@ -5,8 +5,16 @@ CSV_PATH = "./data/raw/event_stream.csv"
 
 conn = duckdb.connect(DB_PATH)
 
+# Creating Schemas for each layer
 conn.execute(f"""
-    CREATE OR REPLACE TABLE raw_events_stream AS
+    CREATE SCHEMA raw;
+    CREATE SCHEMA staging;
+    CREATE SCHEMA marts;
+""")
+
+# Loading CSV into RAW schema (ingestion layer)
+conn.execute(f"""
+    CREATE OR REPLACE TABLE RAW.events_stream AS
     SELECT *
     FROM read_csv_auto('{CSV_PATH}')
 """)
