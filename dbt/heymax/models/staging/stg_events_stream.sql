@@ -7,7 +7,7 @@ select
 	user_id,
 	gender as user_gender,
 	event_type,
-	transaction_category,
+	coalesce(transaction_category, 'n/a') as transaction_category,
 	miles_amount,
 	platform,
 	utm_source,

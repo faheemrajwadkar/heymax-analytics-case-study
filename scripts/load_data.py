@@ -11,7 +11,4 @@ conn.execute(f"""
     FROM read_csv_auto('{CSV_PATH}')
 """)
 
-with open(CSV_PATH, 'r') as f:
-    print(f.read(10))
-
 print("Data loaded successfully")
