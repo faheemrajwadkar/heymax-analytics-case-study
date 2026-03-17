@@ -1,0 +1,109 @@
+version: 2
+
+models:
+  - name: fct_events
+    description: "The central fact table containing all user events. This table serves as the foundation for activity and growth accounting metrics."
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: event_sk
+        description: "The primary key (surrogate) of the fact table, generated via user_id and event_time."
+        data_type: VARCHAR
+        data_tests:
+          - unique:
+              name: unique_fct_events_sk
+          - not_null:
+              name: not_null_fct_events_sk
+
+      - name: user_id
+        description: "Foreign key to dim_users."
+        data_type: VARCHAR
+        data_tests:
+          - not_null:
+              name: not_null_fct_user_id
+          - relationships:
+              arguments:
+                name: user_id_in_dim_users
+                to: ref('dim_users')
+                field: user_id
+
+      - name: event_time
+        description: "The raw timestamp of the event occurrence."
+        data_type: TIMESTAMP
+        data_tests:
+          - not_null:
+              name: not_null_event_time
+
+      - name: event_date
+        description: "The date of the event occurrence."
+        data_type: TIMESTAMP
+        data_tests:
+          - not_null:
+              name: not_null_event_date
+
+      - name: date_day_sk
+        description: "Foreign key to dim_dates."
+        data_type: INTEGER
+        data_tests:
+          - not_null:
+              name: not_null_fct_date_sk
+          - relationships:
+              arguments:
+                name: date_day_sk_in_dim_dates
+                to: ref('dim_dates')
+                field: date_day_sk
+
+      - name: event_type
+        description: "The category of action performed (e.g., searched for a reward, redeemed miles, etc.)."
+        data_type: VARCHAR
+        data_tests:
+          - not_null:
+              name: not_null_event_type
+          - accepted_values:
+              name: valid_event_types
+              arguments:
+                values: ['miles_redeemed', 'miles_earned', 'like', 'share', 'reward_search']
+      
+      - name: transaction_category
+        description: "The business category of the transaction (e.g., flights, shopping, ecommerce, etc.)."
+        data_type: VARCHAR
+
+      - name: miles_amount
+        description: "The quantitative value of miles earned or spent."
+        data_type: DOUBLE
+        data_tests:
+          - dbt_utils.accepted_range:
+              name: miles_amount_is_positive
+              arguments:  
+                min_value: 0
+                inclusive: true
+
+      - name: user_gender
+        description: "The gender of the user, based on the most recent event record."
+        data_type: VARCHAR
+        data_tests:
+          - not_null:
+              name: not_null_user_gender
+          - accepted_values:
+              name: valid_gender_values
+              arguments:
+                values: ['Male', 'Female', 'Prefer not to say', 'Non-binary']
+
+      - name: platform
+        description: "The device platform where the event originated (e.g., ios, android, web)."
+        data_type: VARCHAR
+        data_tests:
+          - not_null:
+              name: not_null_platform
+
+      - name: utm_source
+        description: "The marketing channel or source that referred the user."
+        data_type: VARCHAR
+
+      - name: country
+        description: "The ISO country code or name where the event originated."
+        data_type: VARCHAR
+        data_tests:
+          - not_null:
+              name: not_null_country

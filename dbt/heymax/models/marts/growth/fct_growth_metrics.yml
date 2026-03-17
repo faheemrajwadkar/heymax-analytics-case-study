@@ -1,0 +1,63 @@
+version: 2
+
+models:
+  - name: fct_growth_metrics
+    description: "The final output table for growth accounting. It aggregates user activity into four mutually exclusive cohorts: New, Retained, Resurrected, and Churned. Supports Daily, Weekly, and Monthly grains."
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: growth_metrics_sk
+        description: "Primary key: MD5 hash of dt and period."
+        data_type: VARCHAR
+        data_tests:
+          - unique:
+              name: unique_growth_metrics_sk
+          - not_null:
+              name: not_null_growth_metrics_sk
+
+      - name: dt
+        description: "The reference date for the metrics. For weekly/monthly periods, this is the start of the period."
+        data_type: DATE
+        data_tests:
+          - not_null:
+              name: not_null_growth_dt
+
+      - name: period
+        description: "The time grain of the record: 'daily', 'weekly', or 'monthly'."
+        data_type: VARCHAR
+        data_tests:
+          - not_null:
+              name: not_null_growth_period
+          - accepted_values:
+              name: valid_growth_periods
+              arguments:
+                values: ['daily', 'weekly', 'monthly']
+
+      - name: new_users
+        description: "Count of users whose first-ever activity occurred in this period."
+        data_type: BIGINT
+        data_tests:
+          - not_null:
+              name: not_null_new_users
+
+      - name: retained_users
+        description: "Count of users active in this period who were also active in the previous period."
+        data_type: BIGINT
+        data_tests:
+          - not_null:
+              name: not_null_retained_users
+
+      - name: resurrected_users
+        description: "Count of users active in this period who were inactive in the previous period but active in the prior period."
+        data_type: BIGINT
+        data_tests:
+          - not_null:
+              name: not_null_resurrected_users
+
+      - name: churned_users
+        description: "Count of users inactive in this period who were active in the previous period."
+        data_type: BIGINT
+        data_tests:
+          - not_null:
+              name: not_null_churned_users
