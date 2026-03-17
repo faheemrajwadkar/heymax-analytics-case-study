@@ -1,0 +1,61 @@
+version: 2
+
+models:
+  - name: dim_users
+    description: "The primary dimension table for users. It contains user-level attributes like gender and first/last activity timestamps derived from the events stream."
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: user_id
+        description: "The unique identifier for each user."
+        data_type: VARCHAR
+        data_tests:
+          - unique:
+              name: unique_dim_users_id
+          - not_null:
+              name: not_null_dim_users_id
+
+      - name: user_gender
+        description: "The gender of the user, based on the most recent event record."
+        data_type: VARCHAR
+        data_tests:
+          - not_null:
+              name: not_null_user_gender
+          - accepted_values:
+              name: valid_gender_values
+              arguments:
+                values: ['Male', 'Female', 'Prefer not to say', 'Non-binary']
+
+      - name: user_activated_at
+        description: "The timestamp of the user's first recorded event."
+        data_type: TIMESTAMP
+        data_tests:
+          - not_null:
+              name: not_null_user_activated_at
+          - dbt_utils.expression_is_true:
+              name: user_activated_at__before__user_last_activity_at
+              arguments:
+                expression: "<= user_last_activity_at"
+
+      - name: user_last_activity_at
+        description: "The timestamp of the user's most recent recorded event."
+        data_type: TIMESTAMP
+        data_tests:
+          - not_null:
+              name: not_null_user_last_activity_at
+          - dbt_utils.expression_is_true:
+              name: user_last_activity_at__after__user_activated_at
+              arguments:
+                expression: ">= user_activated_at"
+
+      - name: user_total_events
+        description: "The total count of events attributed to the user across all time."
+        data_type: HUGEINT
+        data_tests:
+          - not_null:
+              name: not_null_user_total_events
+          - dbt_utils.expression_is_true:
+              name: user_total_events_positive
+              arguments:
+                expression: "> 0"
