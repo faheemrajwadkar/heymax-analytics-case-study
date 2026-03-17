@@ -67,11 +67,11 @@ To ensure reliability, the project employs several safety gates:
 ## 💡 Technical Decisions & Trade-offs
 
 ### High-Integrity Reconciliation
-**Decision:** Implementation of a reconciliation test, specifically designed to run at the end of pipeline.
+**Decision:** Implementation of a reconciliation test, specifically designed to run at the end of pipeline.  
 **Reasoning:** To prevent "Metric Drift", I built a custom test that validates the Growth Accounting Metrics against raw event logs. This ensures 100% data trust for downstream stakeholders.
 
 ### Schema Strategy: Medallion Architecture
-**Decision:** Not using `ephemeral` materialization for Intermediate models. 
+**Decision:** Not using `ephemeral` materialization for Intermediate models.  
 **Reasoning:** While that is generally preferred to keep the warehouse clean of helper tables, here materialized models made sense due to population of user activity across different grains (days, weeks, months) and it's use downstream to generate the growth metrics model. 
 
 ---
