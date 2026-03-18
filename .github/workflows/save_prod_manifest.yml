@@ -27,5 +27,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dbt-manifest
-          path: dbt/heymax/target/manifest.json # dbt always puts manifest.json here
+          path: dbt/heymax/target/manifest.json
           retention-days: 14
