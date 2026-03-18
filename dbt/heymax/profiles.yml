@@ -14,5 +14,5 @@ heymax:
     ci:
       type: duckdb
       path: ../../data/warehouse/heymax.duckdb
-      schema: ''
+      schema: ci
       threads: 4

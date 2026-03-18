@@ -1,4 +1,4 @@
-name: Save Production Manifest & Deploy Docs to GH Pages
+name: Production Deploy, Save Production Manifest & Deploy Docs to GH Pages
 on:
   push:
     branches: [ "main" ]
@@ -26,11 +26,44 @@ jobs:
       - name: DuckDB setup - Create heymax.duckdb and ingest data
         run: python ${{ github.workspace }}/scripts/load_data.py
 
+      # --- STEP 1: SYNC PRODUCTION ---
+      # We download the manifest from the PREVIOUS successful run to identify what changed
+      - name: Download Previous Manifest
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: Production Deploy & Docs
+          name: dbt-manifest
+          branch: main
+          path: ./dbt/heymax/state/
+          if_no_artifact_found: warn
+          
+      - name: Deploy Changes to Prod
+        run: |
+          cd dbt/heymax/
+          
+          if [ -f "./state/manifest.json" ]; then
+            # Check if anything is actually modified
+            MODIFIED_COUNT=$(dbt ls --select state:modified+ --state ./state --quiet | wc -l)
+
+            if [ "$MODIFIED_COUNT" -gt 0 ]; then
+              echo "Changes detected ($MODIFIED_COUNT nodes). Proceeding with Prod Update..."
+              dbt build --select +state:modified+ --exclude tag:post_build_tests --state ./state --target prod
+              dbt test --select +state:modified+ --tag post_build_tests --state ./state --target prod
+            else
+              echo "No changes detected relative to production manifest. Skipping build/test."
+            fi
+          else
+            echo "No manifest found. Running full Prod Update..."
+            dbt build --exclude tag:post_build_tests --target prod 
+            dbt test --select tag:post_build_tests --target prod 
+          fi
+      
+      # --- STEP 2: GENERATE DOCS FROM PROD ---
       - name: Generate dbt Docs
         run: |
           cd dbt/heymax/
           dbt deps
-          dbt docs generate
+          dbt docs generate --target prod
           echo "Files generated in target"
           cd ../..
           python ${{ github.workspace }}/scripts/generate_docs.py
@@ -49,3 +82,10 @@ jobs:
           publish_dir: ./dbt/heymax/target
           publish_filename: index.html    # Rename static_index.html > index.html
           force_orphan: true              # Optional: Keep a history of deployments
+
+      # --- STEP 4: CLEANUP ---
+      - name: Cleanup Temporary Schemas
+        if: always()
+        run: |
+          dbt run-operation cleanup_schema --args '{schema_name: ci}' --target prod
+          dbt run-operation cleanup_schema --args '{schema_name: dbt}' --target prod
