@@ -22,6 +22,7 @@ jobs:
         run: |
           cd dbt/heymax/
           dbt deps
+          
           dbt compile --profiles-dir .
 
       - name: Upload Manifest Artifact
