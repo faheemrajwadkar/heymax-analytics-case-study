@@ -40,17 +40,18 @@ jobs:
       - name: Slim CI Build
         run: |
           cd dbt/heymax/
-
-          # Debug: List the state folder to prove the manifest is there
-          echo "Checking for manifest in $(pwd)/state"
-          ls -R ./state
           
           if [ -f "./state/manifest.json" ]; then
-            echo "Manifest found. Running Slim CI on modified models..."
-            dbt build --select state:modified+ --exclude tag:post_build_tests --state ./state --target ci 
+            # Check if anything is actually modified
+            MODIFIED_COUNT=$(dbt ls --select state:modified+ --state ./state --quiet | wc -l)
 
-            echo "Manifest found. Running Slim CI on modified models...Tests" 
-            dbt test --select state:modified+ tag:post_build_tests --state ./state --target ci 
+            if [ "$MODIFIED_COUNT" -gt 0 ]; then
+              echo "Changes detected ($MODIFIED_COUNT nodes). Proceeding with Slim CI..."
+              dbt build --select state:modified+ --exclude tag:post_build_tests --state ./state --target ci
+              dbt test --select state:modified+ --tag post_build_tests --state ./state --target ci
+            else
+              echo "No changes detected relative to production manifest. Skipping build/test."
+            fi
           else
             echo "No manifest found. Running full CI build..."
             dbt build --exclude tag:post_build_tests --target ci 
