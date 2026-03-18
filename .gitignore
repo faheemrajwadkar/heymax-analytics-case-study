@@ -17,6 +17,5 @@ __pycache__/
 venv/
 .vscode/
 .idea/
-dbt/heymax/profiles.yml
 dbt/logs/
 dbt.log
