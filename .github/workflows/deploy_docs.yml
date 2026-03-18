@@ -28,7 +28,7 @@ jobs:
 
       # --- STEP 1: SYNC PRODUCTION ---
       # We download the manifest from the PREVIOUS successful run to identify what changed
-      - name: Download Previous Manifest
+      - name: DBT Slim CI
         uses: dawidd6/action-download-artifact@v6
         with:
           workflow: Production Deploy & Docs
@@ -87,5 +87,6 @@ jobs:
       - name: Cleanup Temporary Schemas
         if: always()
         run: |
+          cd dbt/heymax/
           dbt run-operation cleanup_schema --args '{schema_name: ci}' --target prod
           dbt run-operation cleanup_schema --args '{schema_name: dbt}' --target prod
