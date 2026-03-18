@@ -51,21 +51,37 @@ To ensure reliability, the project employs several safety gates:
 ---
 
 ## 🚀 How to Run
-1.  **Clone the repo:** `git clone <repo-url>`
-2.  **Spin up a Python environment:** `python -m venv heymax`
-3.  **Activate environment:** `source heymax/bin/activate`
-4.  **Install dependencies:** `pip install -r requirements.txt`
-5.  **Ingest Data:** `python scripts/load_data.py`
-6.  **Build & Test:**  
-    ```bash
-    dbt build --exclude tag:post_build_tests    # Run all models, snapshots, and tests (except those that depend on multiple models).
-    dbt test --select tag:post_build_tests      # Run reconciliatory tests that depend on multiple models to verify model accuracy.
-    ```
-8.  **View Documentation:**
-    ```bash
-    dbt docs generate
-    dbt docs serve --port 8080
-    ```
+
+### Option 1: Manual Execution (Development)
+1. **Clone the repo:** `git clone <repo-url>`
+2. **Setup Environment:**
+   ```bash
+   python -m venv heymax && source heymax/bin/activate
+   pip install -r requirements.txt
+   ```
+3. **Ingest & Build:** 
+   ```bash
+   python scripts/load_data.py
+   cd dbt/heymax/
+   dbt deps
+   dbt build --exclude tag:post_build_tests
+   dbt test --select tag:post_build_tests
+   ```
+
+### Option 2: Orchestrated Execution (Recommended)
+This project uses **Astronomer (Astro CLI)** to orchestrate the pipeline via Airflow and Cosmos.
+
+1. **Install Astro CLI:** [Install Instructions](https://www.astronomer.io/docs/astro/cli/install-cli)
+2. **Start the Stack:** 
+   ```bash
+   astro dev start
+   ```
+3. **Access the Pipeline:**
+   * Open **Airflow UI** at `localhost:8080` (User/Pass: `admin`/`admin`).
+   * Trigger the `heymax_data_pipeline` DAG.
+   * This automatically handles **Ingestion -> Transformation -> Post-Build Testing**.
+
+---
 
 ## 💡 Technical Decisions & Trade-offs
 
