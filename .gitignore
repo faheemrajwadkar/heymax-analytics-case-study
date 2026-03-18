@@ -19,3 +19,5 @@ venv/
 .idea/
 dbt/logs/
 dbt.log
+.astro/
+.DS_Store

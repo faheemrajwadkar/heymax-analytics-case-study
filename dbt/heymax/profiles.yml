@@ -5,14 +5,14 @@ heymax:
       type: duckdb
       path: ../../data/warehouse/heymax.duckdb
       schema: dbt
-      threads: 4
+      threads: 1
     prod:
       type: duckdb
       path: ../../data/warehouse/heymax.duckdb
       schema: ''
-      threads: 4
+      threads: 1
     ci:
       type: duckdb
       path: ../../data/warehouse/heymax.duckdb
       schema: ci
-      threads: 4
+      threads: 1

@@ -1,3 +1,3 @@
-{{ config(tags=['post_build_tests']) }}
+{{ config(tags = ['post_build_tests']) }}
 
 {{ generate_growth_accounting_reconciliation_test('daily') }}

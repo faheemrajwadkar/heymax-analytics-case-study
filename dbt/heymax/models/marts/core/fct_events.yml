@@ -27,6 +27,8 @@ models:
                 name: user_id_in_dim_users
                 to: ref('dim_users')
                 field: user_id
+                config:
+                  tags: ['post_build_tests']
 
       - name: event_time
         description: "The raw timestamp of the event occurrence."
@@ -53,6 +55,8 @@ models:
                 name: date_day_sk_in_dim_dates
                 to: ref('dim_dates')
                 field: date_day_sk
+                config:
+                  tags: ['post_build_tests']
 
       - name: event_type
         description: "The category of action performed (e.g., searched for a reward, redeemed miles, etc.)."
