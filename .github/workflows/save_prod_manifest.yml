@@ -19,7 +19,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Generate Manifest
-        run: 
+        run: |
           cd dbt/heymax/
           dbt compile 
 
