@@ -77,6 +77,10 @@ To ensure reliability, the project employs several safety gates:
 **Decision:** Not using `ephemeral` materialization for Intermediate models.  
 **Reasoning:** While that is generally preferred to keep the warehouse clean of helper tables, here materialized models made sense due to population of user activity across different grains (days, weeks, months) and it's use downstream to generate the growth metrics model. 
 
+## What more could I have done?
+
+1. **Incremental Modeling:** Given more time, I'd have implemented incremental modeling on all the `fct_*` tables. This is a non-negotiable in large scale databases to keep daily run times in check. 
+
 ---
 
 ## 🔮 Future State: AI Agentic Systems
