@@ -2,6 +2,8 @@ name: Save Production Manifest for GH Pages
 on:
   push:
     branches: [ "main" ]
+  
+  workflow_dispatch:
 
 jobs:
   archive_manifest:
@@ -17,7 +19,6 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Generate Manifest
-        # We don't need to run data, just compile the project logic
         run: 
           cd dbt/heymax/
           dbt compile 
