@@ -1,4 +1,4 @@
-name: Save Production Manifest & Deploy Docs
+name: Save Production Manifest & Deploy Docs to GH Pages
 on:
   push:
     branches: [ "main" ]
@@ -31,6 +31,8 @@ jobs:
           cd dbt/heymax/
           dbt deps
           dbt docs generate
+          echo "Files generated in target"
+          ls target/
           python ${{ github.workspace }}/scripts/generate_docs.py
 
       - name: Upload Manifest Artifact (for Slim CI)
