@@ -31,7 +31,7 @@ jobs:
       - name: DBT Slim CI
         uses: dawidd6/action-download-artifact@v6
         with:
-          workflow: Production Deploy & Docs
+          workflow: deploy_docs.yml
           name: dbt-manifest
           branch: main
           path: ./dbt/heymax/state/
