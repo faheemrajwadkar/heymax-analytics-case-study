@@ -38,7 +38,6 @@ jobs:
         run: |
           echo "Current Working Directory: $(pwd)"
           echo "Root Workspace: $GITHUB_WORKSPACE"
-          echo "List Root Files:"
           ls -R $GITHUB_WORKSPACE
           python ${{ github.workspace }}/scripts/ingest_data.py
 
