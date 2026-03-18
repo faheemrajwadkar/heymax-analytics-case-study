@@ -11,6 +11,12 @@ def render_retention_dashboard():
         df = pd.read_csv('modules/data_retention.csv')
 
         if not df.empty:
+            # Apply Filter
+            df['signup_month'] = pd.to_datetime(df['signup_month'])
+            max_month = df['signup_month'].max()
+            cutoff_date = max_month - pd.DateOffset(months=cohort_months)
+            df = df[df['signup_month'] > cutoff_date]
+            
             # Pivot & Calculate %
             pivot = df.pivot(index='signup_month', columns='months_since_signup', values='active_users')
             pivot.index = pd.to_datetime(pivot.index)
