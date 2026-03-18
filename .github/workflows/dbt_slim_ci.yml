@@ -35,7 +35,7 @@ jobs:
           if_no_artifact_found: warn
 
       - name: DuckDB setup - Create heymax.duckdb and ingest data
-        run: python ${{ github.workspace }}/scripts/ingest_data.py
+        run: python ${{ github.workspace }}/${{ github.repository }}/scripts/ingest_data.py
 
       - name: Slim CI Build
         run: |
