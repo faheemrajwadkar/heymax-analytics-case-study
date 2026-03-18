@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./  # Adjusted to your repo root
+        working-directory: ./dbt/heymax/
 
     steps:
       - uses: actions/checkout@v4

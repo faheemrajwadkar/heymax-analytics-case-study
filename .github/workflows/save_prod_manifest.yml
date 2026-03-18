@@ -6,6 +6,9 @@ on:
 jobs:
   archive_manifest:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./dbt/heymax/
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

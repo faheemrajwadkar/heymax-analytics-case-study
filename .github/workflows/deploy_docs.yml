@@ -6,6 +6,9 @@ on:
 jobs:
   build_docs_and_archive:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./dbt/heymax/
     permissions:
       contents: write  # to push to gh-pages branch
     
