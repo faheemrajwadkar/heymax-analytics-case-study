@@ -19,13 +19,13 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Generate Manifest
-        run: 
+        run: |
           cd dbt/heymax/
-          dbt compile 
+          dbt compile --profiles-dir .
 
       - name: Upload Manifest Artifact
         uses: actions/upload-artifact@v4
         with:
           name: dbt-manifest
-          path: .dbt/heymax/target/manifest.json # dbt always puts manifest.json here
+          path: dbt/heymax/target/manifest.json # dbt always puts manifest.json here
           retention-days: 14
