@@ -32,20 +32,20 @@ jobs:
           dbt deps
           dbt docs generate
           echo "Files generated in target"
-          ls target/
+          cd ../..
           python ${{ github.workspace }}/scripts/generate_docs.py
 
       - name: Upload Manifest Artifact (for Slim CI)
         uses: actions/upload-artifact@v4
         with:
           name: dbt-manifest
-          path: ./target/manifest.json
+          path: ./dbt/heymax/target/manifest.json
           retention-days: 14
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./target
+          publish_dir: ./dbt/heymax/target
           publish_filename: index.html    # Rename static_index.html > index.html
           force_orphan: true              # Optional: Keep a history of deployments
