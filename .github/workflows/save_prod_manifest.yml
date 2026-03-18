@@ -1,4 +1,4 @@
-name: Save Production Manifest
+name: Save Production Manifest for GH Pages
 on:
   push:
     branches: [ "main" ]
