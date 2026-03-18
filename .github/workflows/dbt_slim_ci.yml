@@ -30,12 +30,12 @@ jobs:
           workflow: save_prod_manifest.yml 
           name: dbt-manifest
           branch: main
-          path: ./state/
+          path: ./dbt/heymax/state/
           search_artifacts: true 
           if_no_artifact_found: warn
 
       - name: DuckDB setup - Create heymax.duckdb and ingest data
-        run: python scripts/ingest_data.py
+        run: python ${{ github.workspace }}/scripts/ingest_data.py
 
       - name: Slim CI Build
         run: |
