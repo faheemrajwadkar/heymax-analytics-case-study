@@ -47,12 +47,12 @@ jobs:
           
           if [ -f "./state/manifest.json" ]; then
             echo "Manifest found. Running Slim CI on modified models..."
-            dbt build --select state:modified+ --exclude tag:post_build_tests --state ./state 
+            dbt build --select state:modified+ --exclude tag:post_build_tests --state ./state --target ci 
 
             echo "Manifest found. Running Slim CI on modified models...Tests" 
-            dbt test --select state:modified+ tag:post_build_tests --state ./state 
+            dbt test --select state:modified+ tag:post_build_tests --state ./state --target ci 
           else
             echo "No manifest found. Running full CI build..."
-            dbt build --exclude tag:post_build_tests
-            dbt test --select tag:post_build_tests
+            dbt build --exclude tag:post_build_tests --target ci 
+            dbt test --select tag:post_build_tests --target ci 
           fi
