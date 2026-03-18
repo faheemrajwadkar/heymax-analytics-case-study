@@ -1,0 +1,20 @@
+
+  
+  create view "heymax"."staging"."stg_events_stream__dbt_tmp" as (
+    with source as (
+    select * from "heymax"."raw"."events_stream"
+)
+
+select 
+	event_time,
+	user_id,
+	gender as user_gender,
+	event_type,
+	coalesce(transaction_category, 'n/a') as transaction_category,
+	miles_amount,
+	platform,
+	utm_source,
+	country,
+	current_localtimestamp() as _batched_at
+from source
+  );

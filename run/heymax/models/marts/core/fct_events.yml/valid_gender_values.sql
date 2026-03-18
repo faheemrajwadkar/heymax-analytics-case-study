@@ -1,0 +1,36 @@
+
+    
+    select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+  
+    
+    
+
+with all_values as (
+
+    select
+        user_gender as value_field,
+        count(*) as n_records
+
+    from "heymax"."marts"."fct_events"
+    group by user_gender
+
+)
+
+select *
+from all_values
+where value_field not in (
+    'Male','Female','Prefer not to say','Non-binary'
+)
+
+
+
+  
+  
+      
+    ) dbt_internal_test
