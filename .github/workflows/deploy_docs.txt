@@ -1,0 +1,50 @@
+name: Save Production Manifest & Deploy Docs
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build_docs_and_archive:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # to push to gh-pages branch
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Ingest Data
+        # We need the DuckDB file to generate the catalog.json (column metadata)
+        run: python scripts/ingest_data.py
+
+      - name: Generate dbt Docs
+        run: |
+          cd dbt/heymax/
+          dbt docs generate
+          cd ..
+          cd ..
+          python scripts/generate_docs.py
+
+      - name: Upload Manifest Artifact (for Slim CI)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-manifest
+          path: ./target/manifest.json
+          retention-days: 14
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./target
+          # This ensures 'static_index.html' becomes 'index.html' on the website
+          publish_filename: index.html 
+          # Optional: Keep a history of deployments
+          force_orphan: true
