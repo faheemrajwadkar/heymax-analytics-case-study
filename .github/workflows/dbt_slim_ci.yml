@@ -40,6 +40,11 @@ jobs:
       - name: Slim CI Build
         run: |
           cd dbt/heymax/
+
+          # Debug: List the state folder to prove the manifest is there
+          echo "Checking for manifest in $(pwd)/state"
+          ls -R ./state
+          
           if [ -f "./state/manifest.json" ]; then
             echo "Manifest found. Running Slim CI on modified models..."
             dbt build --select state:modified+ --exclude tag:post_build_tests --state ./state 
