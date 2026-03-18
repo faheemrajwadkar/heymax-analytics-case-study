@@ -22,6 +22,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
+          cd dbt/heymax/          
           dbt deps
 
       - name: Download Production Manifest
@@ -40,6 +41,7 @@ jobs:
 
       - name: Slim CI Build
         run: |
+          cd dbt/heymax/
           if [ -f "./state/manifest.json" ]; then
             echo "Manifest found. Running Slim CI on modified models..."
             dbt build --select state:modified+ --exclude tag:post_build_tests --state ./state 

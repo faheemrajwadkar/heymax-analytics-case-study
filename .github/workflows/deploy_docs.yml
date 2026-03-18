@@ -29,7 +29,10 @@ jobs:
 
       - name: Generate dbt Docs
         run: |
+          cd dbt/heymax/
           dbt docs generate
+          cd ..
+          cd ..
           python scripts/generate_docs.py
 
       - name: Upload Manifest Artifact (for Slim CI)

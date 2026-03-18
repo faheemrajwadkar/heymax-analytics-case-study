@@ -6,9 +6,7 @@ on:
 jobs:
   archive_manifest:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./dbt/heymax/
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -20,11 +18,13 @@ jobs:
 
       - name: Generate Manifest
         # We don't need to run data, just compile the project logic
-        run: dbt compile 
+        run: 
+          cd dbt/heymax/
+          dbt compile 
 
       - name: Upload Manifest Artifact
         uses: actions/upload-artifact@v4
         with:
           name: dbt-manifest
-          path: ./target/manifest.json # dbt always puts manifest.json here
+          path: .dbt/heymax/target/manifest.json # dbt always puts manifest.json here
           retention-days: 14
