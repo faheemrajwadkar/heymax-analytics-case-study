@@ -18,24 +18,29 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
       
-      - name: Install Dependencies
-        run: |
-          pip install -r requirements.txt
-          cd dbt/heymax/          
-          dbt deps
+      # - name: Install Dependencies
+      #   run: |
+      #     pip install -r requirements.txt
+      #     cd dbt/heymax/          
+      #     dbt deps
 
-      - name: Download Production Manifest
-        uses: dawidd6/action-download-artifact@v6
-        with:
-          workflow: save_prod_manifest.yml 
-          name: dbt-manifest
-          branch: main
-          path: ./dbt/heymax/state/
-          search_artifacts: true 
-          if_no_artifact_found: warn
+      # - name: Download Production Manifest
+      #   uses: dawidd6/action-download-artifact@v6
+      #   with:
+      #     workflow: save_prod_manifest.yml 
+      #     name: dbt-manifest
+      #     branch: main
+      #     path: ./dbt/heymax/state/
+      #     search_artifacts: true 
+      #     if_no_artifact_found: warn
 
       - name: DuckDB setup - Create heymax.duckdb and ingest data
-        run: python ${{ github.workspace }}/${{ github.repository }}/scripts/ingest_data.py
+        run: |
+          echo "Current Working Directory: $(pwd)"
+          echo "Root Workspace: $GITHUB_WORKSPACE"
+          echo "List Root Files:"
+          ls -R $GITHUB_WORKSPACE
+          python ${{ github.workspace }}/${{ github.repository }}/scripts/ingest_data.py
 
       - name: Slim CI Build
         run: |
