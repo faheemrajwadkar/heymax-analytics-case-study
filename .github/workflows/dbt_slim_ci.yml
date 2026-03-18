@@ -48,7 +48,7 @@ jobs:
             if [ "$MODIFIED_COUNT" -gt 0 ]; then
               echo "Changes detected ($MODIFIED_COUNT nodes). Proceeding with Slim CI..."
               dbt build --select +state:modified+ --exclude tag:post_build_tests --state ./state --target ci
-              dbt test --select +state:modified+ --tag post_build_tests --state ./state --target ci
+              dbt test --select +state:modified+ --select tag:post_build_tests --state ./state --target ci
             else
               echo "No changes detected relative to production manifest. Skipping build/test."
             fi
