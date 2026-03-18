@@ -3,6 +3,8 @@ name: DBT Slim CI
 on:
   pull_request:
     branches: [ "main" ]
+  
+  workflow_dispatch:
 
 jobs:
   build:
@@ -32,8 +34,7 @@ jobs:
           search_artifacts: true 
           if_no_artifact_found: warn
 
-      - name: Ingest Data (Required for DuckDB)
-        # We must create the .duckdb file so dbt has something to query
+      - name: DuckDB setup - Create heymax.duckdb and ingest data
         run: python scripts/ingest_data.py
 
       - name: Slim CI Build
