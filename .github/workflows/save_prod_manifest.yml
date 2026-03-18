@@ -16,7 +16,9 @@ jobs:
           python-version: '3.11'
 
       - name: Install Dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          python scripts/load_data.py
 
       - name: Generate Manifest
         run: |
