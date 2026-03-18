@@ -43,7 +43,10 @@ To ensure reliability, the project employs several safety gates:
 * **Data Contracts:** Enforced on all `dim` and `fct` models to prevent downstream errors in BI tools.
 * **Relationship Tests:** Validates referential integrity between Fact and Dimension tables.
 * **Reconciliation Tests:** A custom singular test (tagged `reconciliation`) ensures that the sum of growth cohorts matches the total unique active users in the raw event logs.
-* **CI/CD Pipeline:** Every Pull Request triggers a `dbt build` in a temporary environment to validate logic before merging.
+* **CI/CD & Data Governance:**
+   1. **Slim CI (Pull Requests):** Validates changes in an isolated `CI` environment. By comparing the PR against the production `manifest.json`, the pipeline executes only the modified models and their downstream dependencies (`+state:modified+`).
+   2. **Prod Updates (Merge):** Upon merging to `main`, the pipeline synchronizes the Production environment and archives a new manifest to serve as the baseline for future PRs.
+   3. **Automated Hygiene:** A post-deployment cleanup process triggers a custom dbt macro to purge temporary `CI` and `dev` schemas, ensuring a zero-footprint warehouse.
 
 ---
 
