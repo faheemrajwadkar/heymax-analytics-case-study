@@ -1,0 +1,51 @@
+name: DBT Slim CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./  # Adjusted to your repo root
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          dbt deps
+
+      - name: Download Production Manifest
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: save_prod_manifest.yml 
+          name: dbt-manifest
+          branch: main
+          path: ./state/
+          search_artifacts: true 
+          if_no_artifact_found: warn
+
+      - name: Ingest Data (Required for DuckDB)
+        # We must create the .duckdb file so dbt has something to query
+        run: python scripts/ingest_data.py
+
+      - name: Slim CI Build
+        run: |
+          if [ -f "./state/manifest.json" ]; then
+            echo "Manifest found. Running Slim CI on modified models..."
+            dbt build --select state:modified+ --exclude tag:post_build_tests --state ./state 
+            dbt test --select state:modified+ tag:post_build_tests
+          else
+            echo "No manifest found. Running full CI build..."
+            dbt build --exclude tag:post_build_tests
+            dbt test --select tag:post_build_tests
+          fi
