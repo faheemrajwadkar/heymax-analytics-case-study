@@ -1,39 +1,113 @@
 # 📈 User Growth & Lifecycle Analytics (dbt + DuckDB)
 
-This project implements a production-grade **Modern Data Stack** to analyze user growth and lifecycle transitions for HeyMax's travel rewards platform. It uses a **Growth Accounting Framework** to categorize users into mutually exclusive cohorts (`New`, `Retained`, `Resurrected`, and `Churned`) across **daily**, **weekly**, and **monthly** grains.
-
+This project implements a Modern Data Stack to analyze user growth and lifecycle transitions for the HeyMax travel rewards platform. It uses a **Growth Accounting Framework** to categorize users into mutually exclusive cohorts (`New`, `Retained`, `Resurrected`, and `Churned`) across daily, weekly, and monthly grains.
 
 ## 🛠️ Tech Stack
 * **Transformation:** dbt-core (v1.11.x)
 * **Database:** DuckDB (In-process OLAP)
-* **Orchestration:** Apache Airflow (DAG-based scheduling)
+* **Orchestration:** Apache Airflow & Cosmos
+* **Visualization:** Streamlit (Hosted on Community Cloud)
 * **CI/CD:** GitHub Actions (Automated testing & deployment)
 * **Documentation:** Hosted via GitHub Pages [LINK]
 
 ---
 
 ## 🏗️ Project Architecture
-The warehouse follows a modular, three-layer Medallion-style architecture:
+The warehouse follows a three-layer Medallion-style architecture:
 
-1.  **Staging (`stg_`):** Atomic, cleaning version of raw events_stream .csv file ingested.
-2.  **Intermediate (`inter_`):** Cascading user-date table for growth accounting, periodic growth metrics calculations.
+<p align="center">
+  <img src="./assets/HeyMax Data Flow.png" width="1200">
+</p>
+
+1.  **Staging (`stg_`):** Cleaning and renaming raw event streams from CSV.
+2.  **Intermediate (`inter_`):** Building the spine of user-date activity and calculating state transitions.
 3.  **Marts (`fct_`, `dim_`):** The final, stakeholder-facing layer.
-    * `dim_users`: Dimension table capturing the latest user attributes (gender).
-    * `fct_events`: Event level table for exploratory analysis and stakeholder deep dives.
-    * `fct_growth_metrics`: The core source of truth for growth accounting.
+    * `dim_users`: Snapshot of user attributes.
+    * `fct_events`: Cleaned event log for deep-dive analysis.
+    * `fct_growth_metrics`: The primary source of truth for growth accounting.
 
 ---
 
 ## 📊 Growth Accounting Logic
-The core metric in this project follows the **Growth Accounting Identity**:
+The core metric follows the **Growth Accounting Identity**:
 > **Total Active Users = New + Retained + Resurrected**
 
 | Cohort | Definition |
 | :--- | :--- |
-| **New** | Users whose first-ever activity occurred in the current period. |
-| **Retained** | Users active in the current period who were also active in the *previous* period. |
-| **Resurrected** | Users active in the current period who were *inactive* in the previous period but active historically. |
-| **Churned** | Users active in the previous period who are *inactive* in the current period. |
+| **New** | First-ever activity occurred in the current period. |
+| **Retained** | Active in current period AND active in the previous period. |
+| **Resurrected** | Active in current period AND inactive in previous period, but active historically. |
+| **Churned** | Active in previous period AND inactive in the current period. |
+
+
+<div style="width: 30%; margin: 0 auto;"> 
+<p align="center"><strong>Data Model ER Diagram</strong></p>
+
+```mermaid
+erDiagram
+    DIM_USERS ||--o{ FCT_EVENTS : "tracks activity"
+    DIM_DATES ||--o{ FCT_EVENTS : "event_date"
+    DIM_DATES ||--o{ FCT_GROWTH_METRICS : "dt"
+
+    DIM_USERS {
+        string user_id PK
+        string user_gender
+        timestamp user_activated_at
+        timestamp user_last_activity_at
+        int user_total_events
+    }
+
+    DIM_DATES {
+        date date PK
+        int date_day_sk
+        string day_name
+        string month_name
+        int year
+        int quarter
+        int month
+        int week
+        boolean is_weekend
+    }
+
+    FCT_EVENTS {
+        string event_sk PK
+        string user_id FK
+        timestamp event_time
+        date event_date FK
+        int date_day_sk
+        string event_type
+        string transaction_category
+        float miles_amount
+        string user_gender
+        string platform
+        string utm_source
+        string country
+    }
+
+    FCT_GROWTH_METRICS {
+        string growth_metrics_sk PK
+        date dt FK
+        string period
+        int new_users
+        int retained_users
+        int resurrected_users
+        int shadow_churned_users
+    }
+```
+
+</div>
+
+---
+
+## ⚙️ Orchestration & Monitoring
+
+### Pipeline Flow
+The project uses **Apache Airflow** (via Astronomer) to manage the end-to-end flow: 
+`S3/Local Ingestion` → `DuckDB Load` → `dbt Build` → `Post-Build Tests`.
+
+### Operational Logging
+* **Airflow Logs:** Detailed task-level logs are accessible via the Airflow UI for debugging pipeline failures.
+* **dbt Execution Tracking:** A custom macro records the start time, end time, and status of every dbt model run into a dedicated `monitoring.run_logs` table. This allows for long-term trend analysis of model performance and data freshness.
 
 ---
 
@@ -50,36 +124,11 @@ To ensure reliability, the project employs several safety gates:
 
 ---
 
-## 🚀 How to Run
-
-### Option 1: Manual Execution (Development)
-1. **Clone the repo:** `git clone <repo-url>`
-2. **Setup Environment:**
-   ```bash
-   python -m venv heymax && source heymax/bin/activate
-   pip install -r requirements.txt
-   ```
-3. **Ingest & Build:** 
-   ```bash
-   python scripts/load_data.py
-   cd dbt/heymax/
-   dbt deps
-   dbt build --exclude tag:post_build_tests
-   dbt test --select tag:post_build_tests
-   ```
-
-### Option 2: Orchestrated Execution (Recommended)
-This project uses **Astronomer (Astro CLI)** to orchestrate the pipeline via Airflow and Cosmos.
-
-1. **Install Astro CLI:** [Install Instructions](https://www.astronomer.io/docs/astro/cli/install-cli)
-2. **Start the Stack:** 
-   ```bash
-   astro dev start
-   ```
-3. **Access the Pipeline:**
-   * Open **Airflow UI** at `localhost:8080` (User/Pass: `admin`/`admin`).
-   * Trigger the `heymax_data_pipeline` DAG.
-   * This automatically handles **Ingestion -> Transformation -> Post-Build Testing**.
+## 🖥️ Dashboard & Docs
+* **Interactive Dashboard:** [Streamlit App Link]
+    * *Note:* For performance and security, the cloud dashboard runs on aggregated CSV exports rather than a direct connection to the full database.
+* **Data Dictionary:** [GitHub Pages Link]
+    * Detailed documentation of every column, model, and test in the warehouse.
 
 ---
 
@@ -93,12 +142,72 @@ This project uses **Astronomer (Astro CLI)** to orchestrate the pipeline via Air
 **Decision:** Not using `ephemeral` materialization for Intermediate models.  
 **Reasoning:** While that is generally preferred to keep the warehouse clean of helper tables, here materialized models made sense due to population of user activity across different grains (days, weeks, months) and it's use downstream to generate the growth metrics model. 
 
-## What more could I have done?
+---
 
-1. **Incremental Modeling:** Given more time, I'd have implemented incremental modeling on all the `fct_*` tables. This is a non-negotiable in large scale databases to keep daily run times in check. 
+## 🛠️ What’s next? (Future Improvements)
+
+If I had more time to scale this, these would be the priority:
+1. **Incremental Loading:** Currently, the models rebuild entirely. In a real-world scenario with millions of events, switching to incremental materialization is a must to keep run times low.
+2. **User Segmentation:** I’d break down the growth metrics by user attributes (e.g., gender, region) to see which cohorts drive the most retention.
+3. **Automated Alerts:** Integrating Slack alerts for failed reconciliation tests would move this from a dashboard to an active monitoring system.
+4. **Semantic Layer:** Implementing dbt Semantic Layer (Metrics) to allow stakeholders to query these metrics directly from Excel or other BI tools without writing SQL.
+
+---
+
+## 🔌 How to Run
+
+### 🚀 Option 1 - Quick Start
+1. **Clone the Repo:** `git clone https://github.com/faheemrajwadkar/heymax-analytics-case-study.git`
+2. **Navigate into the project directory:** `cd heymax-analytics-case-study`
+3. **Setup dbt:** `chmod +x setup_dbt.sh && ./setup_dbt.sh`
+4. **Setup Airflow:** `chmod +x setup_airflow.sh && ./setup_airflow.sh`
+
+### 🛠️ Option 2 - Manual Set Up
+#### Part 1: Manual Execution
+1. **Clone the repo:** `git clone <repo-url>`
+2. **Setup Environment:**
+   ```bash
+   python -m venv heymax && source heymax/bin/activate
+   pip install -r pip_requirements.txt
+   ```
+3. **Ingest & Build:** 
+   ```bash
+   cd heymax-analytics-case-study 
+   python scripts/load_data.py
+
+   cd dbt/heymax/
+   dbt deps
+   dbt build --exclude tag:post_build_tests
+   dbt test --select tag:post_build_tests
+   ```
+
+#### Part 2: Orchestrated Execution
+This project uses **Astronomer (Astro CLI)** to orchestrate the pipeline via Airflow and Cosmos.
+
+1. **Install Astro CLI:** [Install Instructions](https://www.astronomer.io/docs/astro/cli/install-cli)
+2. **Set up Astro Dev Environment:**
+   ```bash
+   astro dev init
+   cat <<EOF > requirements.txt
+   astronomer-cosmos
+   dbt-duckdb
+   pandas
+   plotly
+   EOF
+   ```
+3. **Start the Stack:** 
+   ```bash
+   astro dev start
+   ```
+4. **Access the Pipeline:**
+   * Open **Airflow UI** at `localhost:8080` (User/Pass: `admin`/`admin`).
+   * Trigger the `heymax_data_pipeline` DAG.
+   * This automatically handles **Ingestion -> Transformation -> Post-Build Testing**.
 
 ---
 
 ## 🔮 Future State: AI Agentic Systems
-For the strategy behind scaling this documentation using LLMs and an "Agentic" workflow, please refer to the:
+I have also designed a workflow to automate the documentation and metadata management of this stack using LLMs.
 👉 **[AI Agentic Systems Design Document](./agent-design.md)**
+
+
