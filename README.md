@@ -37,65 +37,11 @@ The core metric follows the **Growth Accounting Identity**:
 | **New** | First-ever activity occurred in the current period. |
 | **Retained** | Active in current period AND active in the previous period. |
 | **Resurrected** | Active in current period AND inactive in previous period, but active historically. |
-| **Churned** | Active in previous period AND inactive in the current period. |
+| **Churned** | Active in previous period AND inactive in the current period. |  
 
-
-<div style="width: 30%; margin: 0 auto;"> 
-<p align="center"><strong>Data Model ER Diagram</strong></p>
-
-```mermaid
-erDiagram
-    DIM_USERS ||--o{ FCT_EVENTS : "tracks activity"
-    DIM_DATES ||--o{ FCT_EVENTS : "event_date"
-    DIM_DATES ||--o{ FCT_GROWTH_METRICS : "dt"
-
-    DIM_USERS {
-        string user_id PK
-        string user_gender
-        timestamp user_activated_at
-        timestamp user_last_activity_at
-        int user_total_events
-    }
-
-    DIM_DATES {
-        date date PK
-        int date_day_sk
-        string day_name
-        string month_name
-        int year
-        int quarter
-        int month
-        int week
-        boolean is_weekend
-    }
-
-    FCT_EVENTS {
-        string event_sk PK
-        string user_id FK
-        timestamp event_time
-        date event_date FK
-        int date_day_sk
-        string event_type
-        string transaction_category
-        float miles_amount
-        string user_gender
-        string platform
-        string utm_source
-        string country
-    }
-
-    FCT_GROWTH_METRICS {
-        string growth_metrics_sk PK
-        date dt FK
-        string period
-        int new_users
-        int retained_users
-        int resurrected_users
-        int shadow_churned_users
-    }
-```
-
-</div>
+<p align="center">
+  <img src="./assets/Data Model.png" height="600">
+</p>
 
 ---
 
