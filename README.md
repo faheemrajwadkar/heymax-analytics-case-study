@@ -71,10 +71,9 @@ To ensure reliability, the project employs several safety gates:
 ---
 
 ## 🖥️ Dashboard & Docs
-* **Interactive Dashboard:** [Streamlit App Link]
+* **Interactive Dashboard:** [Streamlit App](https://heymax-analytics-case-study-faheem-rajwadkar.streamlit.app/)
     * *Note:* For performance and security, the cloud dashboard runs on aggregated CSV exports rather than a direct connection to the full database.
-* **Data Dictionary:** [GitHub Pages Link]
-    * Detailed documentation of every column, model, and test in the warehouse.
+* **DBT Documentation Website:** [LINK](https://faheemrajwadkar.github.io/heymax-analytics-case-study/)
 
 ---
 
