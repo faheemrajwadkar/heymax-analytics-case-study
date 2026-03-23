@@ -6,9 +6,9 @@ This project implements a Modern Data Stack to analyze user growth and lifecycle
 * **Transformation:** dbt-core (v1.11.x)
 * **Database:** DuckDB (In-process OLAP)
 * **Orchestration:** Apache Airflow & Cosmos
-* **Visualization:** Streamlit (Hosted on Community Cloud)
+* **Visualization:** [Streamlit App](https://heymax-analytics-case-study-faheem-rajwadkar.streamlit.app/) (Hosted on Community Cloud)
 * **CI/CD:** GitHub Actions (Automated testing & deployment)
-* **Documentation:** Hosted via GitHub Pages [LINK]
+* **Documentation:** Hosted via GitHub Pages - [LINK](https://faheemrajwadkar.github.io/heymax-analytics-case-study/)
 
 ---
 
