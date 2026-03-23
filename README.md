@@ -3,7 +3,7 @@
 This project implements a Modern Data Stack to analyze user growth and lifecycle transitions for the HeyMax travel rewards platform. It uses a **Growth Accounting Framework** to categorize users into mutually exclusive cohorts (`New`, `Retained`, `Resurrected`, and `Churned`) across daily, weekly, and monthly grains.
 
 ## 🛠️ Tech Stack
-* **Transformation:** dbt-core (v1.11.x)
+* **Transformation:** dbt-core (v1.11.7)
 * **Database:** DuckDB (In-process OLAP)
 * **Orchestration:** Apache Airflow & Cosmos
 * **Visualization:** [Streamlit App](https://heymax-analytics-case-study-faheem-rajwadkar.streamlit.app/) (Hosted on Community Cloud)
@@ -48,8 +48,8 @@ The core metric follows the **Growth Accounting Identity**:
 ## ⚙️ Orchestration & Monitoring
 
 ### Pipeline Flow
-The project uses **Apache Airflow** (via Astronomer) to manage the end-to-end flow: 
-`S3/Local Ingestion` → `DuckDB Load` → `dbt Build` → `Post-Build Tests`.
+The project uses **Apache Airflow** (via Astronomer) to manage the end-to-end flow:  
+`Cloud/Local Ingestion` → `DuckDB Load` → `dbt Build` → `Post-Build Tests`.
 
 ### Operational Logging
 * **Airflow Logs:** Detailed task-level logs are accessible via the Airflow UI for debugging pipeline failures.
@@ -62,7 +62,7 @@ To ensure reliability, the project employs several safety gates:
 
 * **Data Contracts:** Enforced on all `dim` and `fct` models to prevent downstream errors in BI tools.
 * **Relationship Tests:** Validates referential integrity between Fact and Dimension tables.
-* **Reconciliation Tests:** A custom singular test (tagged `reconciliation`) ensures that the sum of growth cohorts matches the total unique active users in the raw event logs.
+* **Reconciliation Tests:** A custom singular test (tagged `post_build_tests`) ensures that the sum of growth cohorts matches the total unique active users in the raw event logs.
 * **CI/CD & Data Governance:**
    1. **Slim CI (Pull Requests):** Validates changes in an isolated `CI` environment. By comparing the PR against the production `manifest.json`, the pipeline executes only the modified models and their downstream dependencies (`+state:modified+`).
    2. **Prod Updates (Merge):** Upon merging to `main`, the pipeline synchronizes the Production environment and archives a new manifest to serve as the baseline for future PRs.
